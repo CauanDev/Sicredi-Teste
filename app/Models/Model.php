@@ -49,6 +49,32 @@ class Model
         $pdo->exec($sql);
     }
 
+    public function search($filters)
+    {
+        $pdo = self::getConnection();
+
+        // Prepara a consulta com base nos critérios fornecidos
+        $whereClause = '';
+        $bindings = [];
+        foreach ($filters as $column => $value) {
+            $whereClause .= $column . " = :$column AND ";
+            $bindings[$column] = $value;
+        }
+
+        // Remove o último "AND" extra da cláusula WHERE
+        $whereClause = rtrim($whereClause, " AND ");
+
+        // Prepara a consulta SQL
+        $sql = "SELECT * FROM " . $this->table . " WHERE $whereClause";
+
+        // Executa a consulta
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($bindings);
+
+        // Retorna os resultados
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+
     public function all()
     {
         $pdo = self::getConnection();

@@ -4,19 +4,25 @@
 export('Controllers/AboutController');
 export('Controllers/HomeController');
 export('Controllers/UserController');
+export('Controllers/DashboardController');
 
 class Controller
 {
+    public function __construct($checkLogin = false)
+    {
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /login');
+            exit();
+        }
+    }
+
     public static function render($view, $data = [])
     {
-        // Extrair os dados para variáveis
         if (!empty($data)) {
             extract($data);
         }
 
-        // Iniciar o buffer de saída
         ob_start();
-
 
         // Adicionar o layout da navbar, caso a view não seja 'error_conexao'
         if ($view !== 'error_conexao') {

@@ -1,47 +1,116 @@
 <!DOCTYPE html>
-<html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login de Usuário</title>
+    <title>Login</title>
 </head>
+
 <body>
     <div class="container d-flex justify-content-center align-items-center vh-100">
         <div class="card p-4 shadow" style="width: 100%; max-width: 400px;">
             <h3 class="text-center mb-4">Login de Usuário</h3>
-            <form action="/login" method="POST">
-                <!-- Campo para E-mail/Usuário -->
+            <form id="loginForm" action="/login" method="POST" novalidate>
+                <!-- Campo para E-mail -->
                 <div class="mb-3">
-                    <label for="email" class="form-label">E-mail ou Usuário</label>
-                    <input 
-                        type="text" 
-                        class="form-control" 
-                        id="email" 
-                        name="email" 
-                        placeholder="Digite seu e-mail ou usuário" 
-                        required>
+                    <label for="email" class="form-label">E-mail</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="email"
+                        name="email"
+                        placeholder="Digite seu e-mail"
+                        required
+                        aria-required="true">
+                    <div class="invalid-feedback">Por favor, insira um e-mail válido.</div>
                 </div>
+
                 <!-- Campo para Senha -->
                 <div class="mb-3">
                     <label for="password" class="form-label">Senha</label>
-                    <input 
-                        type="password" 
-                        class="form-control" 
-                        id="password" 
-                        name="password" 
-                        placeholder="Digite sua senha" 
-                        required>
+                    <input
+                        type="password"
+                        class="form-control"
+                        id="password"
+                        name="password"
+                        placeholder="Digite sua senha"
+                        required
+                        aria-required="true">
+                    <div class="invalid-feedback">A senha deve ter pelo menos 6 caracteres.</div>
                 </div>
+
                 <!-- Botão de Login -->
                 <div class="d-grid">
                     <button type="submit" class="btn btn-primary">Entrar</button>
                 </div>
-                <!-- Link para Recuperar Senha -->
-                <div class="text-center mt-3">
-                    <a href="forgot_password.php" class="text-decoration-none">Esqueceu sua senha?</a>
-                </div>
             </form>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#loginForm').on('submit', function(e) {
+                e.preventDefault(); // Evita o envio padrão do formulário
+
+                // Limpa todas as mensagens de erro anteriores
+                $('.is-invalid').removeClass('is-invalid');
+                $('.invalid-feedback').hide();
+
+                const formData = {
+                    email: $('#email').val(),
+                    password: $('#password').val(),
+                };
+
+                let hasError = false;
+
+                // Verifica se o e-mail é válido (contém "@" e ".")
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!formData.email || !emailRegex.test(formData.email)) {
+                    $('#email').addClass('is-invalid');
+                    $('#email').siblings('.invalid-feedback').show();
+                    hasError = true;
+                }
+
+                // Verifica o tamanho da senha (mínimo de 6 caracteres)
+                if (!formData.password || formData.password.length < 6) {
+                    $('#password').addClass('is-invalid');
+                    $('#password').siblings('.invalid-feedback').show();
+                    hasError = true;
+                }
+
+                // Se houver erro, não envia o formulário
+                if (hasError) {
+                    return;
+                }
+
+                $.ajax({
+                    url: '/login',
+                    method: 'POST',
+                    data: formData,
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            console.log(response);
+                            showAlert(response.message, 'success');
+                            showSpinner();
+                            // Redireciona após 2 segundos
+                            setTimeout(function() {
+                                window.location.href = '/dashboard'; // Substitua pelo seu destino
+                            }, 2000);
+                        }
+                        if (response.dados_invalidos) {
+                            if (response.dados_invalidos.email) {
+                                $('#email').addClass('is-invalid');
+                                $('#email').siblings('.invalid-feedback').text(response.dados_invalidos.email).show();
+                            }
+                        }
+                    },
+                    error: function(error) {
+                        showAlert('Tente novamente.', 'danger');
+                    },
+                });
+            });
+        });
+    </script>
+
 </body>
+
 </html>
