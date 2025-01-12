@@ -1,10 +1,5 @@
-<?php
-session_start(); // Certifique-se de iniciar a sessão para acessar as variáveis de sessão
-?>
-
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +7,15 @@ session_start(); // Certifique-se de iniciar a sessão para acessar as variávei
   <link rel="icon" type="image/png" href="https://logospng.org/download/sicredi/logo-sicredi-icon-1024.png">
   <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .card-form {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 80vh;
+    }
+
+  </style>
 </head>
 
 <body>
@@ -28,14 +32,33 @@ session_start(); // Certifique-se de iniciar a sessão para acessar as variávei
           <?php if (isset($_SESSION['user_id'])): ?>
             <li class="nav-item">
               <a class="nav-link" href="dashboard">Dashboard</a>
-            </li>
+            </li>            
+            <!-- Menu de Administrador -->
+            <?php if (isset($_SESSION['admin']) && $_SESSION['admin'] == TRUE): ?>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Área de Administrador
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="/documentos">Documentos</a></li>
+                  <li><a class="dropdown-item" href="/uploads">Uploads</a></li>
+                  <li><a class="dropdown-item" href="/documentos/upload">Upload de Documentos</a></li>
+                  <li><a class="dropdown-item" href="#">Criar Documentos</a></li>
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+                  <li><a class="dropdown-item" href="#">Auditoria</a></li>
+                  <li><a class="dropdown-item" href="#">Configuração</a></li>
+                </ul>
+              </li>
+
+            <?php endif; ?>
+
             <li class="nav-item">
-              <a class="nav-link" href="docs">Documentos</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="logout">Logout</a>
+              <a class="nav-link" href="/logout">Logout</a>
             </li>
             <li>
+
 
 
             <?php else: ?>
@@ -48,13 +71,18 @@ session_start(); // Certifique-se de iniciar a sessão para acessar as variávei
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="/register">Registro</a>
             </li>
+
+
+
           <?php endif; ?>
+
+
 
         </ul>
       </div>
     </div>
   </nav>
-
+ 
   <div id="alertContainer"></div>
   <div id="spinnerContainer"></div>
 

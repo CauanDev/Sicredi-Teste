@@ -1,13 +1,8 @@
 <?php
 
-export('Controllers/Controller');
-export('Models/User');
-export('Services/UserService');
-
 class UserController extends Controller
 {
-    protected $service;
-
+    private $service;
 
     public function __construct()
     {

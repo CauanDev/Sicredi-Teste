@@ -1,6 +1,7 @@
 <?php
 
 export('Models/User');
+export('Models/Documento');
 loadEnv();
 
 class Model
@@ -41,12 +42,35 @@ class Model
             name VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );";
+            type BOOLEAN DEFAULT FALSE,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            update_at TIMESTAMP 
+        );
+        
+      CREATE TABLE IF NOT EXISTS uploads (
+            id SERIAL PRIMARY KEY, 
+            user_id INT NOT NULL, 
+            upload_id VARCHAR(255) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        );
+        ";
 
         $pdo = self::getConnection();
 
         $pdo->exec($sql);
+    }
+
+    public function query($sql, $params = [])
+    {
+        $pdo = self::getConnection();
+
+        // Dessa forma, não é necessário passar o nome da tabela, pois ele já está instanciado no model        
+        $sql = str_replace('TABLE_NAME', $this->table, $sql);
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($params);
+
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
     public function search($filters)
@@ -64,10 +88,8 @@ class Model
         // Remove o último "AND" extra da cláusula WHERE
         $whereClause = rtrim($whereClause, " AND ");
 
-        // Prepara a consulta SQL
         $sql = "SELECT * FROM " . $this->table . " WHERE $whereClause";
 
-        // Executa a consulta
         $stmt = $pdo->prepare($sql);
         $stmt->execute($bindings);
 

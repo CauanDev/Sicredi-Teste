@@ -5,13 +5,18 @@ export('Controllers/AboutController');
 export('Controllers/HomeController');
 export('Controllers/UserController');
 export('Controllers/DashboardController');
-
+export('Controllers/AdminController');
 class Controller
 {
-    public function __construct($checkLogin = false)
+    public function __construct($checkLogin = false, $adminLogin = false)
     {
         if (!isset($_SESSION['user_id'])) {
             header('Location: /login');
+            exit();
+        }
+
+        if ($adminLogin && (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true)) {
+            header('Location: /dashboard');
             exit();
         }
     }

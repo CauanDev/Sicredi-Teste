@@ -66,4 +66,22 @@ Route::post('/register', function (){
     return (new UserController())->store($dados);
 });
 
+Route::get('/documentos', function (){
+    return (new AdminController())->index();
+});
+
+Route::get('/uploads', function (){
+    return (new AdminController())->uploads();
+});
+
+Route::get('/documentos/upload', function (){
+    return (new AdminController())->upload();
+});
+
+
+Route::post('/documentos/upload', function (){
+    $dados = $_POST; 
+
+    return (new AdminController())->store($dados);
+});
 

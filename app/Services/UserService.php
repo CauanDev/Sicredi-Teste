@@ -21,6 +21,8 @@ class UserService extends Service
                 if (password_verify($dados['password'], $user->password)) {
                     $_SESSION['user_id'] = $user->id;
                     $_SESSION['user_name'] = $user->name;
+                    
+                    $_SESSION['admin'] = ($user->type === true); 
                     return json_encode(['success' => true, 'message' => 'Usuário logado com sucesso']);
                 } else {
                     return json_encode([
@@ -40,7 +42,6 @@ class UserService extends Service
                 ]);
             }
         } catch (\Exception $e) {
-            var_dump($e->getMessage());
             return json_encode(['error' => true, 'error' => $e->getMessage()]);
         }
     }

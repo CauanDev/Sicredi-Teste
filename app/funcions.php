@@ -30,4 +30,16 @@ function loadEnv()
     }
 }
 
+function renderLayout($caminho, $data = [])
+{
+    $arquivo = __DIR__ . "/" . $caminho . ".php";
+
+    if (file_exists($arquivo)) {
+        extract($data);
+        require_once $arquivo;
+    } else {
+        echo ("Arquivo não encontrado: " . $arquivo);
+    }
+}
+
 

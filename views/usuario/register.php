@@ -5,7 +5,7 @@
 </head>
 
 <body>
-    <div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card-form d-flex justify-content-center align-items-center">
         <div class="card p-4 shadow" style="width: 100%; max-width: 400px;">
             <h3 class="text-center mb-4">Registro de Usuário</h3>
             <form id="registerForm" action="/register" method="POST" novalidate>
