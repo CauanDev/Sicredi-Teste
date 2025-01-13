@@ -1,19 +1,24 @@
 <!DOCTYPE html>
+
 <head>
     <title>Uploads</title>
 </head>
 
 <body>
-    <h1>Uploads</h1>
+    <div class="container mt-2">
+        <h1>Uploads</h1>
 
-    <?php
+        <div class="container table-responsive d-flex justify-content-center">
+            <?php
+            renderLayout('../views/layouts/dataTable', [
+                "headers" => $headers,
+                "body" => $body,
+                "keys" => $keys
+            ]);
+            ?>
+        </div>
+    </div>
 
-    renderLayout('../views/layouts/dataTable', [
-        "headers" => $headers,
-        "body" => $body
-    ]);
-
-    ?>
 </body>
 
 </html>

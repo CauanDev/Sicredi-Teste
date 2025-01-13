@@ -18,21 +18,21 @@ function showAlert(message, type, containerId = "alertContainer") {
     } else {
         console.error(`Contêiner com ID "${containerId}" não encontrado.`);
     }
+
 }
 
-function showSpinner(){
-    const spinnerHTML = `
-    <div class="position-fixed top-50 start-50 translate-middle" style="z-index: 1050; width: 3rem; height: 3rem;">
-        <div class="spinner-grow text-success" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-    </div>`;
-
+function showSpinner(show = true) {
     const container = document.getElementById('spinnerContainer');
     if (container) {
-        container.innerHTML = spinnerHTML;
-    } 
+        if (show) {
+            container.style.display = 'flex';  
+        } else {
+            container.style.display = 'none'; 
+        }
+    }
 }
+
+
 
 // Registrar globalmente
 window.showAlert = showAlert;

@@ -1,31 +1,31 @@
-<table class="table table-hover">
+<table class="table table-sm table-hover">
   <thead>
     <tr>
       <?php
-      // Loop para gerar os cabeçalhos
       foreach ($headers as $header) {
-          echo "<th scope='col'>{$header}</th>";
+        echo "<th scope='col'>{$header}</th>";
       }
       ?>
     </tr>
   </thead>
   <tbody>
     <?php
-    // Loop para gerar as linhas do corpo da tabela
+
     foreach ($body as $row) {
-        echo "<tr>";
-        
-        // Loop para gerar as células da linha
-        foreach ($row as $index => $cell) {
-            if ($headers[$index] == "Actions") {
-                echo "<td><button class='btn btn-primary' data-id='{$cell}'>Ação {$cell}</button></td>";
-            } else {
-                // Outras colunas
-                echo "<td>{$cell}</td>";
-            }
+      echo "<tr>";
+      foreach ($keys as $key) {
+        if ($key == "actions-delete") {
+          echo "<td><button class='btn btn-sm btn-primary' data-id='{$row->id}'><i class='bi bi-trash-fill'></i></button></td>";
+        } else if ($key == "actions-index") {
+          echo "<td>
+              <button class='btn btn-sm btn-primary' data-id='{$row->id}' data-target='update'><i class='bi bi-pencil-fill'></i></button>
+              <button class='btn btn-sm btn-danger' data-id='{$row->id}' data-target='delete'><i class='bi bi-trash-fill'></i></button>
+              </td>";
+        } else {
+          echo "<td>{$row->$key}</td>";
         }
-        
-        echo "</tr>";
+      }
+      echo "</tr>";
     }
     ?>
   </tbody>

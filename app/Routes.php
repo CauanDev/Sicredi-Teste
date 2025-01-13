@@ -74,14 +74,28 @@ Route::get('/uploads', function (){
     return (new AdminController())->uploads();
 });
 
-Route::get('/documentos/upload', function (){
-    return (new AdminController())->upload();
+
+
+Route::get('/documentos/create',function(){
+    return (new AdminController())->documento();
+
+});
+
+Route::post('/documentos/create',function(){
+    $dados = $_POST; 
+    
+    return (new AdminController())->documentoStore($dados);
+
 });
 
 
-Route::post('/documentos/upload', function (){
+Route::get('/uploads/create', function (){
+    return (new AdminController())->upload();
+});
+
+Route::post('/uploads/create', function (){
     $dados = $_POST; 
 
-    return (new AdminController())->store($dados);
+    return (new AdminController())->uploadStore($dados);
 });
 

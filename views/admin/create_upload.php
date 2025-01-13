@@ -19,7 +19,7 @@
 
                 <div class="form-group mb-3">
                     <label for="file">Arquivo</label>
-                    <input type="file" class="form-control" id="file" name="file">
+                    <input type="file" class="form-control" id="file" name="file" accept="application/pdf">
                     <div class="invalid-feedback">Selecione um arquivo no formato correto.</div>
                 </div>
 
@@ -37,15 +37,16 @@
             });
 
             $('#uploadForm').on('submit', function(e) {
-                e.preventDefault(); 
 
-                $('.invalid-feedback').hide(); 
+                e.preventDefault();
+
+                $('.invalid-feedback').hide();
 
                 var formData = new FormData(this);
                 let hasError = false;
 
                 if ($('#file')[0].files.length === 0) {
-                    $('.invalid-feedback').text('O upload do arquivo é obrigatório.').show(); // Exibe erro se não houver arquivo
+                    $('.invalid-feedback').text('O upload do arquivo é obrigatório.').show(); 
                     hasError = true;
                 }
 
@@ -53,15 +54,16 @@
                 var file = $('#file')[0].files[0];
                 var fileType = file ? file.type : '';
                 if (fileType && fileType !== 'application/pdf') {
-                    $('.invalid-feedback').text('O arquivo deve ser no formato PDF.').show(); // Exibe erro se não for PDF
+                    $('.invalid-feedback').text('O arquivo deve ser no formato PDF.').show();
                     hasError = true;
                 }
 
-                if (hasError) return;
-
-                // Envia o arquivo via AJAX
+                if (hasError) {
+                    return;
+                }
+                //Envia o arquivo via AJAX
                 $.ajax({
-                    url: '/documentos/upload',
+                    url: '/uploads/create',
                     type: 'POST',
                     data: formData,
                     contentType: false,

@@ -48,7 +48,7 @@
     <script>
         $(document).ready(function() {
             $('#loginForm').on('submit', function(e) {
-                e.preventDefault(); // Evita o envio padrão do formulário
+                e.preventDefault(); 
 
                 // Limpa todas as mensagens de erro anteriores
                 $('.is-invalid').removeClass('is-invalid');
@@ -76,7 +76,6 @@
                     hasError = true;
                 }
 
-                // Se houver erro, não envia o formulário
                 if (hasError) {
                     return;
                 }
@@ -90,9 +89,8 @@
                         if (response.success) {
                             showAlert(response.message, 'success');
                             showSpinner();
-                            // Redireciona após 2 segundos
                             setTimeout(function() {
-                                window.location.href = '/dashboard'; // Substitua pelo seu destino
+                                window.location.href = '/dashboard';
                             }, 2000);
                         }
                         if (response.dados_invalidos) {

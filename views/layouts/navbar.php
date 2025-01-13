@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="icon" type="image/png" href="https://logospng.org/download/sicredi/logo-sicredi-icon-1024.png">
   <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"></body>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     .card-form {
@@ -14,7 +16,6 @@
       align-items: center;
       height: 80vh;
     }
-
   </style>
 </head>
 
@@ -32,7 +33,7 @@
           <?php if (isset($_SESSION['user_id'])): ?>
             <li class="nav-item">
               <a class="nav-link" href="dashboard">Dashboard</a>
-            </li>            
+            </li>
             <!-- Menu de Administrador -->
             <?php if (isset($_SESSION['admin']) && $_SESSION['admin'] == TRUE): ?>
               <li class="nav-item dropdown">
@@ -42,8 +43,8 @@
                 <ul class="dropdown-menu">
                   <li><a class="dropdown-item" href="/documentos">Documentos</a></li>
                   <li><a class="dropdown-item" href="/uploads">Uploads</a></li>
-                  <li><a class="dropdown-item" href="/documentos/upload">Upload de Documentos</a></li>
-                  <li><a class="dropdown-item" href="#">Criar Documentos</a></li>
+                  <li><a class="dropdown-item" href="/uploads/create">Upload de Documentos</a></li>
+                  <li><a class="dropdown-item" href="/documentos/create">Criar Documentos</a></li>
                   <li>
                     <hr class="dropdown-divider">
                   </li>
@@ -82,13 +83,15 @@
       </div>
     </div>
   </nav>
- 
-  <div id="alertContainer"></div>
-  <div id="spinnerContainer"></div>
 
+  <div id="alertContainer"></div>
+  <div id="spinnerContainer">
+    <div class="position-fixed top-50 start-50 translate-middle" style="z-index: 9999; width: 3rem; height: 3rem; display: none">
+      <div class="spinner-grow text-success" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="/js/functions.js"></script>
-
-</body>
-
 </html>

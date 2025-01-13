@@ -2,12 +2,16 @@
 
 class AdminController extends Controller
 {
-    private $service;
+    private $documentoService;
+    private $uploadService;
+    private $usersService;
 
     public function __construct()
     {
         parent::__construct(true, true);
-        $this->service = new DocumentoService();
+        $this->uploadService = new UploadService();
+        $this->documentoService = new DocumentoService();
+        $this->usersService = new UserService();
     }
 
     public function index()
@@ -17,14 +21,13 @@ class AdminController extends Controller
 
     public function uploads()
     {
-        return $this->render('admin/upload', [
-            "headers" => ["#", "First", "Last", "Handle"],
-            "body" => [
-                [1, "Mark", "Otto", "@mdo"],
-                [2, "Jacob", "Thornton", "@fat"],
-                [3, "Larry", "Bird", "@twitter"]
-            ]
 
+        $dataTable = $this->uploadService->dataTable();
+
+        return $this->render('admin/upload', [
+            "headers" => ["#", "Arquivo", "Usuário", "Data de Upload", "Ações"],
+            "body" => $dataTable,
+            "keys" => ['id', 'filename', 'user_name', 'formatted_created_at', 'actions-index']
         ]);
     }
 
@@ -33,8 +36,28 @@ class AdminController extends Controller
         return $this->render('admin/create_upload');
     }
 
-    public function store($dados)
+    public function documento()
     {
-        return $this->service->store($dados);
+
+        
+        $uploads = $this->uploadService->getUploads();
+        $users = $this->usersService->getPessoas();
+        return $this->render('admin/create_documento',[
+            "uploads"=>$uploads,
+            "users" => $users
+        ]);
+
     }
+
+    public function documentoStore($dados)
+    {
+        return $this->documentoService->create($dados);
+    }
+
+    public function uploadStore($dados)
+    {
+        return $this->uploadService->create($dados);
+    }
+
+
 }

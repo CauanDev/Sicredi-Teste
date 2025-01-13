@@ -1,8 +1,9 @@
 <?php
 
-class User extends Model
+class Signers extends Model
 {
-    protected $table = 'users';
+
+    protected $table = 'signers';
 
     public function __construct()
     {
@@ -13,4 +14,7 @@ class User extends Model
     {
         return $this->table;
     }
+
+    
+
 }

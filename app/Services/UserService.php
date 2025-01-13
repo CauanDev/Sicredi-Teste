@@ -21,8 +21,9 @@ class UserService extends Service
                 if (password_verify($dados['password'], $user->password)) {
                     $_SESSION['user_id'] = $user->id;
                     $_SESSION['user_name'] = $user->name;
-                    
-                    $_SESSION['admin'] = ($user->type === true); 
+                    $_SESSION['email'] = $user->email;
+                    $_SESSION['cpf'] = $user->cpf;
+                    $_SESSION['admin'] = ($user->type === true);
                     return json_encode(['success' => true, 'message' => 'Usuário logado com sucesso']);
                 } else {
                     return json_encode([
@@ -64,7 +65,9 @@ class UserService extends Service
             $this->store([
                 'email' => $dados['email'],
                 'password' => $hashPassword,
-                'name' => $dados['name']
+                'name' => $dados['name'],
+                'cpf' => $dados['cpf'],
+                "electronicSigner" => ($dados["electronicSigner"] === true)
             ]);
 
             return json_encode(['success' => true, 'message' => 'Usuário cadastrado com sucesso!']);
@@ -73,7 +76,19 @@ class UserService extends Service
         }
     }
 
-
+    public function getPessoas()
+    {
+        return $this->search("
+            SELECT 
+                name AS label,
+                email AS value,
+                cpf AS target,
+                id as ID,
+                electronicSigner as status
+            FROM TABLE_NAME
+            WHERE deleted_at IS NULL;
+        ");
+    }
 
     private function verificarEmail($email)
     {

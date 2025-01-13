@@ -2,6 +2,8 @@
 
 export('Models/User');
 export('Models/Documento');
+export('Models/Upload');
+
 loadEnv();
 
 class Model
@@ -42,18 +44,44 @@ class Model
             name VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
+            cpf VARCHAR(11) UNIQUE NOT NULL,
             type BOOLEAN DEFAULT FALSE,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            update_at TIMESTAMP 
+            update_at TIMESTAMP ,
+            deleted_at TIMESTAMP,
+            electronicSigner BOOLEAN
         );
         
-      CREATE TABLE IF NOT EXISTS uploads (
+        CREATE TABLE IF NOT EXISTS uploads (
             id SERIAL PRIMARY KEY, 
             user_id INT NOT NULL, 
+            fileName VARCHAR(255) UNIQUE NOT NULL,
             upload_id VARCHAR(255) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         );
+    
+        CREATE TABLE IF NOT EXISTS documents (
+            id SERIAL PRIMARY KEY, 
+            user_id INT NOT NULL, 
+            fileName VARCHAR(255) NOT NULL,
+            upload_id INT NOT NULL, 
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+            deleted_at TIMESTAMP ,
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+            FOREIGN KEY (upload_id) REFERENCES uploads(id) ON DELETE CASCADE
+        );
+
+        CREATE TABLE IF NOT EXISTS signers (
+            id SERIAL PRIMARY KEY, 
+            user_id INT NOT NULL, 
+            documents_id INT NOT NULL,  
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+            FOREIGN KEY (documents_id) REFERENCES documents(id) ON DELETE CASCADE
+        );
+
+
         ";
 
         $pdo = self::getConnection();
@@ -61,11 +89,12 @@ class Model
         $pdo->exec($sql);
     }
 
+
     public function query($sql, $params = [])
     {
         $pdo = self::getConnection();
 
-        // Dessa forma, não é necessário passar o nome da tabela, pois ele já está instanciado no model        
+        // Não é necessário passar o nome da tabela, pois ele já está instanciado no model        
         $sql = str_replace('TABLE_NAME', $this->table, $sql);
         $stmt = $pdo->prepare($sql);
         $stmt->execute($params);
@@ -119,8 +148,9 @@ class Model
         $columns = implode(", ", array_keys($data));
         $placeholders = ":" . implode(", :", array_keys($data));
 
-        $stmt = $pdo->prepare("INSERT INTO " . $this->table . " ($columns) VALUES ($placeholders)");
-        return $stmt->execute($data);
+        $stmt = $pdo->prepare("INSERT INTO " . $this->table . " ($columns) VALUES ($placeholders) RETURNING *");        $stmt->execute($data);
+        $result = $stmt->fetch(PDO::FETCH_OBJ);
+        return $result;
     }
 
     public function update($data, $id)

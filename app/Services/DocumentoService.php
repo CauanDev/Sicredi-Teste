@@ -7,43 +7,89 @@ class DocumentoService extends Service
         parent::__construct(new Documento());
     }
 
-    public function store($dados)
+    public function create($dados)
     {
+
+        $uploadService = new UploadService();
+        $signersService = new SignersService();
+
+        $logFilePath = __DIR__ . '/log.txt';
+
         try {
-            if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
+            $users = json_decode($dados['users'], true); // Decodificando o JSON de usuários
+            $signers = [];
+            $electronicSigners = [];
 
-                $fileName = $_FILES['file']['name'];
+            foreach ($users as $index => $user) {
+                $signerData = [
+                    "step" => $index + 1,
+                    "title" => "Signer",
+                    "name" => $user['name'],
+                    "email" => $user['email'],
+                ];
 
-                if(isset($dados['fileName'])){
-                    $fileName = $dados['fileName'].'.pdf';
+                if (isset($user['individualIdentificationCode']) && !empty($user['individualIdentificationCode'])) {
+                    $signerData["individualIdentificationCode"] = $user['individualIdentificationCode'];
                 }
 
-                $fileTmpName = $_FILES['file']['tmp_name'];
-
-
-                $fileContent = file_get_contents($fileTmpName);
-
-
-                $fileBytes = base64_encode($fileContent);
-
-                $response = $this->httpRequest(getenv('PORTAL_API_URL') . '/document/upload', 'POST', [
-                    "fileName" => $fileName,
-                    "bytes" => $fileBytes
-                ], [
-                    "Token: " . getenv('PORTAL_API_TOKEN')
-                ]);
-                $uploadID = json_decode($response, true);
-
-                $this->store([
-                    'user_id' =>  $_SESSION['user_id'],
-                    'upload_id' => $uploadID['uploadId']
-                ]);
-
-                return json_encode(['sucess' => true, 'message' => 'Arquivo publicado com sucesso, utilize ele em 24 horas']);
-            } else {
-                return json_encode(['error' => true, 'message' => 'Erro no upload do arquivo ou nenhum arquivo enviado.']);
+                if ($user['electronicSigner']) {
+                    $electronicSigners[] = $signerData;
+                } else {
+                    $signers[] = $signerData;
+                }
             }
+
+            $body = [
+                "document" => [
+                    "name" => $dados['fileName'],
+                    "upload" => [
+                        "id" => $dados["select-uploads"],
+                        "name" => $dados["name_upload"]
+                    ]
+                ],
+                "sender" => [
+                    "name" => $_SESSION['user_name'],
+                    "email" => $_SESSION['email'],
+                    "individualIdentificationCode" => $_SESSION['cpf']
+                ],
+                "signers" => $signers,
+                "electronicSigners" => $electronicSigners
+            ];
+
+            $response = $this->httpRequest(getenv('PORTAL_API_URL') . '/document/create', 'POST', $body, [
+                "Token: " . getenv('PORTAL_API_TOKEN')
+            ]);
+
+            $response = json_decode($response, true);
+
+            $upload = $uploadService->findOne(
+                "SELECT id FROM uploads WHERE filename LIKE '{$dados['name_upload']}'"
+            );
+            $documento = $this->store([
+                'id' => $response['id'],
+                'user_id' => $_SESSION['user_id'],
+                'fileName' => $dados["fileName"],
+                'upload_id' => $upload[0]->id
+            ]);
+
+            $signers = [];
+
+            foreach ($users as $user) {
+                $signerData = [
+                    "user_id" => $user['id'],
+                    "documents_id" =>  $documento->id,
+                ];
+                $signers[] = $signerData;
+            }
+
+            $signersService->create($signers);
+
+            $logContent = json_encode($signers, JSON_PRETTY_PRINT);
+            file_put_contents($logFilePath, $logContent . PHP_EOL, FILE_APPEND);
+            return json_encode(['success' => true, 'message' => 'Documento cadastrado com sucesso!']);
         } catch (\Exception $e) {
+            $logContent = json_encode($e->getMessage(), JSON_PRETTY_PRINT);
+            file_put_contents($logFilePath, $logContent . PHP_EOL, FILE_APPEND);
             return json_encode(['error' => true, 'message' => $e->getMessage()]);
         }
     }

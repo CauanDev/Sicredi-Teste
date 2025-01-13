@@ -2,6 +2,8 @@
 
 export('Services/UserService');
 export('Services/DocumentoService');
+export('Services/UploadService');
+export('Services/SignersService');
 loadEnv();
 
 class Service
@@ -10,7 +12,7 @@ class Service
 
     public function __construct($model)
     {
-        $this->model = $model; // Defina o modelo que o service irá usar
+        $this->model = $model;
     }
 
     protected function store($dados)
@@ -31,6 +33,11 @@ class Service
     protected function findOne($dados)
     {
         return $this->model->search($dados);
+    }
+
+    protected function search($sql)
+    {
+        return $this->model->query($sql);
     }
 
     protected function httpRequest($url, $method = 'GET', $data = [], $headers = [])

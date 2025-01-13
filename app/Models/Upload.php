@@ -1,8 +1,9 @@
 <?php
 
-class User extends Model
+class Upload extends Model
 {
-    protected $table = 'users';
+
+    protected $table = 'uploads';
 
     public function __construct()
     {
@@ -13,4 +14,5 @@ class User extends Model
     {
         return $this->table;
     }
+
 }
