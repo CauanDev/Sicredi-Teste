@@ -93,4 +93,9 @@ class DocumentoService extends Service
             return json_encode(['error' => true, 'message' => $e->getMessage()]);
         }
     }
+
+    public function findOne($sql)
+    {
+        return $this->search($sql);
+    }
 }

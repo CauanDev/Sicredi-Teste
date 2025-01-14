@@ -1,11 +1,12 @@
 <?php
 
 // Exports dos Controllers
-export('Controllers/AboutController');
-export('Controllers/HomeController');
 export('Controllers/UserController');
 export('Controllers/DashboardController');
 export('Controllers/AdminController');
+export('Controllers/DocumentosController');
+export('Controllers/UploadsController');
+
 class Controller
 {
     public function __construct($checkLogin = false, $adminLogin = false)

@@ -27,75 +27,43 @@ class Route
     }
 }
 
-Route::get('/', function () {
-    return (new HomeController())->index();
-});
 
-Route::get('/sobre', function () {
-    return (new AboutController())->index();
-});
 
-Route::get('/dashboard', function () {
-    return (new DashboardController())->index();
-});
+export('/routes/web');
+export('/routes/uploads');
+export('/routes/documents');
 
-Route::get('/login',function () {
-    return (new UserController())->index();
-});
 
-Route::post('/login', function () {
-    $dados = $_POST; 
 
-    return (new UserController())->login($dados); 
-});
 
-Route::get('/register',function (){
-    return (new UserController())->register();
-});
+// Route::get('/uploads', function (){
+//     return (new AdminController())->uploads();
+// });
 
-Route::get('/logout',function (){
-    session_unset();
-    session_destroy();
-    header('Location: /home');
-    exit();
-});
 
-Route::post('/register', function (){
-    $dados = $_POST; 
+// Route::get('/uploads/create', function (){
+//     return (new AdminController())->upload();
+// });
+
+// Route::post('/uploads/create', function (){
+//     $dados = $_POST; 
+
+//     return (new AdminController())->uploadStore($dados);
+// });
+
+
+
+// Route::get('/documentos/create',function(){
+//     return (new AdminController())->documento();
+
+// });
+
+// Route::post('/documentos/create',function(){
+//     $dados = $_POST; 
     
-    return (new UserController())->store($dados);
-});
+//     return (new AdminController())->documentoStore($dados);
 
-Route::get('/documentos', function (){
-    return (new AdminController())->index();
-});
-
-Route::get('/uploads', function (){
-    return (new AdminController())->uploads();
-});
-
-
-
-Route::get('/documentos/create',function(){
-    return (new AdminController())->documento();
-
-});
-
-Route::post('/documentos/create',function(){
-    $dados = $_POST; 
-    
-    return (new AdminController())->documentoStore($dados);
-
-});
-
-
-Route::get('/uploads/create', function (){
-    return (new AdminController())->upload();
-});
-
-Route::post('/uploads/create', function (){
-    $dados = $_POST; 
-
-    return (new AdminController())->uploadStore($dados);
-});
-
+// });
+// Route::get('/documentos', function (){
+//     return (new AdminController())->index();
+// });

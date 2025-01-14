@@ -8,7 +8,6 @@
   <link rel="icon" type="image/png" href="https://logospng.org/download/sicredi/logo-sicredi-icon-1024.png">
   <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"></body>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     .card-form {
       display: flex;
@@ -32,7 +31,7 @@
           <!-- Usuário Logado -->
           <?php if (isset($_SESSION['user_id'])): ?>
             <li class="nav-item">
-              <a class="nav-link" href="dashboard">Dashboard</a>
+              <a class="nav-link" href="/dashboard">Dashboard</a>
             </li>
             <!-- Menu de Administrador -->
             <?php if (isset($_SESSION['admin']) && $_SESSION['admin'] == TRUE): ?>
@@ -93,5 +92,6 @@
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <script src="/js/functions.js"></script>
 </html>

@@ -10,10 +10,6 @@ class Signers extends Model
         parent::__construct($this->table);
     }
 
-    public function getTable()
-    {
-        return $this->table;
-    }
 
     
 
