@@ -38,8 +38,8 @@ class DocumentoService extends Service
                 u.created_at DESC;
         ");
     }
-    
-    
+
+
 
     public function create($dados)
     {
@@ -171,33 +171,45 @@ class DocumentoService extends Service
             ['documentId' => $id]
         );
 
+        $url = getenv('PORTAL_API_URL') . '/document/ValidateSignatures?key=' . $key[0]->key;
 
-        $response = $this->httpRequest(getenv('PORTAL_API_URL') . '/document/ValidateSignatures?key=' . $key, 'GET', [
+        $response = $this->httpRequest($url, 'GET', [], [
+            "accept: application/json",
             "Token: " . getenv('PORTAL_API_TOKEN')
         ]);
 
-        return json_encode(['sucess' => true, 'dados' => $response]);
+        return json_encode(['sucess' => true, 'dados' => $response,"url" => $key[0]->key]);
     }
 
     public function verificarStatus($id)
     {
-        $response = $this->httpRequest(getenv('PORTAL_API_URL') . '/document/details/' . $id, 'GET', [
-            "Token: " . getenv('PORTAL_API_TOKEN')
-        ]);
+        try {
+            $url = getenv('PORTAL_API_URL') . '/document/details/' . $id;
+            $response = $this->httpRequest($url, 'GET', [], [
+                "accept: application/json",
+                "Token: " . getenv('PORTAL_API_TOKEN')
+            ]);
 
-        return json_encode(['sucess' => true, 'dados' => $response]);
+            return json_encode(['sucess' => true, 'dados' => $response]);
+        } catch (\Exception $e) {
+            return json_encode(['error' => true, 'dados' => $e->getMessage()]);
+        }
     }
 
     public function destroy($id)
     {
         try {
-            $this->httpRequest(getenv('PORTAL_API_URL') . '/document/delete/' . $id, 'DELETE', [
-                "Token: " . getenv('PORTAL_API_TOKEN')
-            ]);
+            $url = getenv('PORTAL_API_URL') . '/document/delete?id=' . $id;
+
+            $headers = [
+                "Token: " . getenv('PORTAL_API_TOKEN'),
+            ];
+    
+            $response = $this->httpRequest($url, 'DELETE', [], $headers);
 
             $this->delete($id);
 
-            return json_encode(['sucess' => true, 'mensagem' => "Deletado com Sucesso"]);
+            return json_encode(['sucess' => true, 'mensagem' => "Deletado com Sucesso","dados" => $response]);
         } catch (\Exception $e) {
             return json_encode(['error' => true, 'mensagem' => "Erro ao Deletar"]);
         }

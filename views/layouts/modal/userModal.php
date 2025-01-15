@@ -23,7 +23,7 @@
                     <div class="mb-3">
                         <label for="electronicSigner" class="form-label">Electronic Signer</label>
                         <input type="checkbox" class="form-check-input" id="electronicSigner" name="electronicSigner">
-                    </div>
+                    </div>  
                     <div class="text-center">
                         <button type="submit" class="btn btn-success">Salvar alterações</button>
                     </div>
