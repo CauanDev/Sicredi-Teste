@@ -21,7 +21,7 @@ Route::get('/register',function (){
 Route::get('/logout',function (){
     session_unset();
     session_destroy();
-    header('Location: /home');
+    header('Location: /login');
     exit();
 });
 
@@ -29,4 +29,20 @@ Route::post('/register', function (){
     $dados = $_POST; 
     
     return (new UserController())->store($dados);
+});
+
+Route::get('/usuarios',function(){
+    return (new AdminController())->index();
+});
+
+Route::post('/usuario',function(){
+    $dados = $_POST; 
+
+    return (new AdminController())->usuario($dados);
+});
+
+Route::post('/usuario/atualizar',function(){
+    $dados = $_POST; 
+
+    return (new AdminController())->atualizarUsuario($dados);
 });

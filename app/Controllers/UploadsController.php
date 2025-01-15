@@ -7,6 +7,7 @@ class UploadsController extends Controller
 
     public function __construct()
     {
+        parent::__construct(true, true);
         $this->service = new UploadService();
     }
     
@@ -14,11 +15,11 @@ class UploadsController extends Controller
     {
 
         $dataTable = $this->service->dataTable();
-
+        
         return $this->render('admin/upload', [
-            "headers" => ["#", "Arquivo", "Usuário", "Data de Upload", "Ações"],
+            "headers" => ["#", "Arquivo", "Usuário", "Data de Upload"],
             "body" => $dataTable,
-            "keys" => ['id', 'filename', 'user_name', 'formatted_created_at', 'actions-index']
+            "keys" => ['id', 'filename', 'user_name', 'formatted_created_at']
         ]);
     }
 

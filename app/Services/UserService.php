@@ -1,12 +1,28 @@
 <?php
 
-export('Models/User');
-export('Services/Service');
 class UserService extends Service
 {
     public function __construct()
     {
         parent::__construct(new User());
+    }
+
+    public function getUser($id)
+    {
+        $user = $this->findOne(['id' => $id]);
+        return json_encode(['success' => true, 'dados' => $user]);
+    }
+
+    public function atualizarUsuario($dados)
+    {
+        try {
+            $this->update($dados, $dados['id']);
+            return json_encode(['success' => true, 'mensagem' => "Atualizado com Sucesso"]);
+        } catch (\Exception $e) {
+            throw $e;
+            return json_encode(['error' => true, 'mensagem' => "Erro ao Atualizar"]);
+
+        }
     }
 
     public function login($dados)
@@ -84,6 +100,7 @@ class UserService extends Service
                 email AS value,
                 cpf AS target,
                 id as ID,
+                TO_CHAR(created_at, 'DD/MM/YYYY HH24:MI') AS criado_em,
                 electronicSigner as status
             FROM TABLE_NAME
             WHERE deleted_at IS NULL;

@@ -34,36 +34,3 @@ export('/routes/uploads');
 export('/routes/documents');
 
 
-
-
-// Route::get('/uploads', function (){
-//     return (new AdminController())->uploads();
-// });
-
-
-// Route::get('/uploads/create', function (){
-//     return (new AdminController())->upload();
-// });
-
-// Route::post('/uploads/create', function (){
-//     $dados = $_POST; 
-
-//     return (new AdminController())->uploadStore($dados);
-// });
-
-
-
-// Route::get('/documentos/create',function(){
-//     return (new AdminController())->documento();
-
-// });
-
-// Route::post('/documentos/create',function(){
-//     $dados = $_POST; 
-    
-//     return (new AdminController())->documentoStore($dados);
-
-// });
-// Route::get('/documentos', function (){
-//     return (new AdminController())->index();
-// });

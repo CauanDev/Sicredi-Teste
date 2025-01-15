@@ -1,4 +1,4 @@
-<table class="table table-sm table-hover">
+<table class="table table-hover">
   <thead>
     <tr>
       <?php
@@ -14,13 +14,21 @@
     foreach ($body as $row) {
       echo "<tr>";
       foreach ($keys as $key) {
-        if ($key == "actions-delete") {
-          echo "<td><button class='btn btn-sm btn-primary' data-id='{$row->id}'><i class='bi bi-trash-fill'></i></button></td>";
-        } else if ($key == "actions-index") {
-          echo "<td>
-              <button class='btn btn-sm btn-primary' data-id='{$row->id}' data-target='update'><i class='bi bi-pencil-fill'></i></button>
+        if ($key == "actions-documentos") {
+          // Não há necessidade de 'actions-documentos' no modelo de dados, geramos as ações manualmente
+          echo "
+          <td>
               <button class='btn btn-sm btn-danger' data-id='{$row->id}' data-target='delete'><i class='bi bi-trash-fill'></i></button>
-              </td>";
+              <button class='btn btn-sm btn-warning text-white view-document' data-id='{$row->id}' data-bs-toggle='modal' data-bs-target='#documentModal'><i class='bi bi-eye-fill'></i></button>
+          </td>
+          ";
+        } elseif ($key == "actions-users") {
+          echo "
+          <td>
+              <button class='btn btn-sm btn-danger' data-id='{$row->id}' data-target='delete'><i class='bi bi-trash-fill'></i></button>
+              <button class='btn btn-sm btn-primary edit-user' data-id='{$row->id}' data-bs-toggle='modal' data-bs-target='#updateUserModal'><i class='bi bi-pencil-fill'></i></button>
+          </td>
+          ";
         } else {
           echo "<td>{$row->$key}</td>";
         }

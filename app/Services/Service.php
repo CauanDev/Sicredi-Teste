@@ -35,9 +35,9 @@ class Service
         return $this->model->search($dados);
     }
 
-    protected function search($sql)
+    protected function search($sql, $params = [])
     {
-        return $this->model->query($sql);
+        return $this->model->query($sql, $params);
     }
 
     protected function httpRequest($url, $method = 'GET', $data = [], $headers = [])
@@ -55,11 +55,17 @@ class Service
 
         if (strtoupper($method) === 'POST') {
             curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data)); 
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
         }
         if (strtoupper($method) === 'PUT') {
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        }
+        if (strtoupper($method) === 'DELETE') {
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+            if (!empty($data)) {
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data)); // Se necessário passar dados no corpo da requisição
+            }
         }
 
         $response = curl_exec($ch);
@@ -67,7 +73,7 @@ class Service
         if (curl_errno($ch)) {
             $error_message = 'Erro cURL: ' . curl_error($ch);
             curl_close($ch);
-            throw new Exception($error_message); 
+            throw new Exception($error_message);
         }
 
         $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);

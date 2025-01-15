@@ -10,25 +10,33 @@ class SignersService extends Service
     public function create($signers)
     {
         try {
-            foreach($signers as $signer){
+            foreach ($signers as $signer) {
                 $this->store($signer);
             }
-            return ["sucess"=>true];
         } catch (\Exception $e) {
-            return ["error"=>true, "message"=>$e->getMessage()];
+            return "";
         }
     }
 
-    // public function dataTable()
-    // {
-    //     return $this->search("
-    //         SELECT uploads.id, uploads.fileName, users.name AS user_name, 
-    //             TO_CHAR(uploads.created_at, 'DD/MM/YYYY HH24:MI') AS formatted_created_at
-    //         FROM {$this->model->getTable()}
-    //         JOIN users ON uploads.user_id = users.id
-    //     ");
-    // }
-
+    public function dataTable()
+    {
+        return $this->search("
+            SELECT 
+                s.id AS signer_id,
+                s.url AS signing_url,
+                d.id AS document_id,
+                d.fileName AS document_name,
+                TO_CHAR(d.created_at, 'DD/MM/YYYY HH24:MI') AS document_created_at
+            FROM 
+                TABLE_NAME s
+            JOIN 
+                documents d ON s.documents_id = d.id
+            WHERE 
+                s.user_id = :user_id
+            ORDER BY 
+                d.created_at DESC;
+        ", ['user_id' => $_SESSION['user_id']]);
+    }
 
     public function findOne($sql)
     {

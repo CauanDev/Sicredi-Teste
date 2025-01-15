@@ -47,8 +47,7 @@
                   <li>
                     <hr class="dropdown-divider">
                   </li>
-                  <li><a class="dropdown-item" href="#">Auditoria</a></li>
-                  <li><a class="dropdown-item" href="#">Configuração</a></li>
+                  <li><a class="dropdown-item" href="/usuarios">Usuarios</a></li>
                 </ul>
               </li>
 

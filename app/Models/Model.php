@@ -3,7 +3,7 @@
 export('Models/User');
 export('Models/Documento');
 export('Models/Upload');
-
+export('Models/Signers');
 loadEnv();
 
 class Model
@@ -65,6 +65,7 @@ class Model
             id SERIAL PRIMARY KEY, 
             user_id INT NOT NULL, 
             fileName VARCHAR(255) NOT NULL,
+            key VARCHAR(255) NOT NULL,
             upload_id INT NOT NULL, 
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
             deleted_at TIMESTAMP ,
@@ -75,13 +76,12 @@ class Model
         CREATE TABLE IF NOT EXISTS signers (
             id SERIAL PRIMARY KEY, 
             user_id INT NOT NULL, 
+            url VARCHAR(255) NOT NULL,
             documents_id INT NOT NULL,  
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
             FOREIGN KEY (documents_id) REFERENCES documents(id) ON DELETE CASCADE
         );
-
-
         ";
 
         $pdo = self::getConnection();
@@ -148,7 +148,8 @@ class Model
         $columns = implode(", ", array_keys($data));
         $placeholders = ":" . implode(", :", array_keys($data));
 
-        $stmt = $pdo->prepare("INSERT INTO " . $this->table . " ($columns) VALUES ($placeholders) RETURNING *");        $stmt->execute($data);
+        $stmt = $pdo->prepare("INSERT INTO " . $this->table . " ($columns) VALUES ($placeholders) RETURNING *");
+        $stmt->execute($data);
         $result = $stmt->fetch(PDO::FETCH_OBJ);
         return $result;
     }
@@ -157,21 +158,39 @@ class Model
     {
         $pdo = self::getConnection();
         $setClause = "";
+    
         foreach ($data as $key => $value) {
-            $setClause .= "$key = :$key, ";
+            if ($key !== 'id') {
+                $setClause .= "$key = :$key, ";
+            }
         }
+    
         $setClause = rtrim($setClause, ", ");
-
+    
+        if (empty($setClause)) {
+            return false;
+        }
+    
         $stmt = $pdo->prepare("UPDATE " . $this->table . " SET $setClause WHERE id = :id");
         $data['id'] = $id;
-
+    
         return $stmt->execute($data);
     }
+    
 
     public function delete($id)
     {
         $pdo = self::getConnection();
-        $stmt = $pdo->prepare("DELETE FROM " . $this->table . " WHERE id = :id");
-        return $stmt->execute(['id' => $id]);
-    }
+
+        $pdo->beginTransaction();
+        try {
+            $stmt = $pdo->prepare("UPDATE " . $this->table . " SET deleted_at = NOW() WHERE id = :id");
+            $stmt->execute(['id' => $id]);
+            $pdo->commit();
+        } catch (Exception $e) {
+            $pdo->rollBack();
+            throw $e;
+        }
+        
+    }    
 }
