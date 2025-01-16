@@ -19,7 +19,10 @@
                         <label for="cpf" class="form-label">CPF</label>
                         <input type="text" class="form-control" id="cpf" name="cpf">
                     </div>
-        
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Senha</label>
+                        <input type="password" class="form-control" id="password" name="password">
+                    </div>
                     <div class="mb-3">
                         <label for="electronicSigner" class="form-label">Electronic Signer</label>
                         <input type="checkbox" class="form-check-input" id="electronicSigner" name="electronicSigner">
@@ -55,7 +58,6 @@ $(document).ready(function () {
                     $('#name').val(data.name);
                     $('#email').val(data.email);
                     $('#cpf').val(data.cpf);
-                    $('#type').val(data.type);
                     $('#electronicSigner').prop('checked', data.electronicSigner);
 
                     // Salvar os valores originais para comparação
@@ -63,7 +65,6 @@ $(document).ready(function () {
                         name: data.name,
                         email: data.email,
                         cpf: data.cpf,
-                        type: String(data.type),
                         electronicSigner: data.electronicSigner ? 'on' : '',
                     };
 
@@ -87,6 +88,9 @@ $(document).ready(function () {
 
         // Comparar os valores atuais com os originais e enviar apenas os alterados
         formData.forEach(({ name, value }) => {
+            if (name === 'password' && value.trim() === '') {
+                return; 
+            }
             if (originalData[name] !== value) {
                 updatedFields[name] = value;
             }
@@ -120,5 +124,6 @@ $(document).ready(function () {
         });
     });
 });
+
 
 </script>

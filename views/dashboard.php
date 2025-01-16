@@ -1,80 +1,59 @@
 <!DOCTYPE html>
-
 <head>
     <title>Dashboard</title>
 </head>
 
-<body>
-    <h1>Bem vindo ao DashBoard</h1>
-    <div id="chart"></div>
+<body class="bg-light">
 
-    <?php
-        renderLayout('../views/layouts/charts/pizzaChart',[
-            "title" => "users_upload",
-            "data" => $uploads
-        ]);
-    ?>
-    <script>
-        // Dados passados pelo PHP (convertidos para JSON)
-        const uploadsData = <?php echo json_encode($uploads); ?>;
-        const documentsData = <?php echo json_encode($documents); ?>;
+    <div class="container mt-5">
+        <h1 class="text-center mb-4 text-dark">Dashboard</h1>
+        <p class="text-center text-muted mb-5">Documentos referentes a <?php echo $_SESSION['user_name']; ?> </p>
 
-        // Convertendo os dados para o formato correto do gráfico
-        const dates = [...new Set([
-            ...uploadsData.map(item => item.date),
-            ...documentsData.map(item => item.date)
-        ])].sort();
+        <!-- Tabela -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <?php
+                renderLayout('../views/layouts/dataTable', [
+                    "headers" => $headers,
+                    "body" => $body,
+                    "keys" => $keys
+                ]);
+                ?>
+            </div>
+        </div>
 
-        const uploads = dates.map(date => {
-            const found = uploadsData.find(item => item.date === date);
-            return found ? found.total_uploads : 0;
-        });
+        <!-- Gráficos -->
+        <div class="row">
+            <div class="col-12 col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <?php
+                        renderLayout('../views/layouts/charts/pizzaChart', [
+                            "title" => "Upload dos Usuarios",
+                            "data" => $uploads,
+                        ]);
+                        ?>
+                    </div>
+                </div>
+            </div>
 
-        const documents = dates.map(date => {
-            const found = documentsData.find(item => item.date === date);
-            return found ? found.total_documents : 0;
-        });
+            <div class="col-12 col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <?php
+                        renderLayout('../views/layouts/charts/lineChart', [
+                            "documents" => $documents,
+                            "uploads" => $uploads,
+                            "title" => "Upload e Documentos por Dia"
+                        ]);
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        // Configuração do gráfico
-        const options = {
-            chart: {
-                type: 'line',
-                height: 350
-            },
-            stroke: {
-                curve: 'smooth',
-            },
-            series: [{
-                    name: 'Uploads',
-                    data: uploads
-                },
-                {
-                    name: 'Documents',
-                    data: documents
-                }
-            ],
-            xaxis: {
-                categories: dates,
-                title: {
-                    text: 'Data'
-                }
-            },
-            yaxis: {
-                title: {
-                    text: 'Quantidade'
-                }
-            },
-            title: {
-                text: 'Uploads e Documentos por Dia',
-                align: 'center'
-            },
-            colors: ['#008FFB', '#FF4560']
-        };
+    </div>
 
-        // Renderizando o gráfico
-        const chart = new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
-    </script>
 </body>
 
 </html>

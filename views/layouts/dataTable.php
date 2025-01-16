@@ -29,6 +29,14 @@
               <button class='btn btn-sm btn-primary edit-user' data-id='{$row->id}' data-bs-toggle='modal' data-bs-target='#updateUserModal'><i class='bi bi-pencil-fill'></i></button>
           </td>
           ";
+        } elseif ($key == "actions-dashboard") {
+          echo "
+          <td>
+              <a href='{$row->url}}' class='btn btn-sm btn-warning text-white ' target='_blank'>
+                  <i class='bi bi-eye-fill'></i>
+              </a>
+          </td>
+          ";
         } else {
           echo "<td>{$row->$key}</td>";
         }

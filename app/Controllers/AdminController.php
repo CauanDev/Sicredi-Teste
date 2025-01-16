@@ -10,7 +10,7 @@ class AdminController extends Controller
         $this->usersService = new UserService();
     }
 
-    public function index()
+    public function usuarios()
     {
         $users = $this->usersService->getPessoas();
 
@@ -20,16 +20,6 @@ class AdminController extends Controller
             "keys" => ['id', 'label', 'value', 'criado_em','actions-users']
 
         ]);
-    }
-
-    public function usuario($dados)
-    {
-        return $this->usersService->getUser($dados['userId']);
-    }
-    
-    public function atualizarUsuario($dados)
-    {
-        return $this->usersService->atualizarUsuario($dados);
     }
 
 }

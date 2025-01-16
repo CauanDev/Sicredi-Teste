@@ -10,7 +10,7 @@ $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 try {
     Model::getConnection();
-    Model::createTable();
+    //Model::createTable();
 
 } catch (PDOException $e) { 
     echo Controller::render('error_conexao');  

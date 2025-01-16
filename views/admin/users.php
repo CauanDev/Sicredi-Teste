@@ -1,27 +1,32 @@
 <!DOCTYPE html>
-
 <head>
-    <title>Usuarios</title>
+    <title>Usuários</title>
 </head>
 
-<body>
-    <div class="container mt-2">
-        <h1>Usuarios</h1>
+<body class="bg-light">
 
-        <div class="container table-responsive d-flex justify-content-center">
+    <div class="container mt-5">
 
-            <?php
-            renderLayout('../views/layouts/modal/userModal');
-            ?>
-            <?php
-            renderLayout('../views/layouts/dataTable', [
-                "headers" => $headers,
-                "body" => $body,
-                "keys" => $keys
-            ]);
-            ?>
+        <h1 class="text-center mb-4 text-dark">Gestão de Usuários</h1>
+
+        <div class="d-flex justify-content-center mb-4">
+            <?php renderLayout('../views/layouts/modal/userModal'); ?>
         </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <?php
+                renderLayout('../views/layouts/dataTable', [
+                    "headers" => $headers,
+                    "body" => $body,
+                    "keys" => $keys
+                ]);
+                ?>
+            </div>
+        </div>
+
     </div>
+
 
 </body>
 

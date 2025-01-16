@@ -1,22 +1,25 @@
 <!DOCTYPE html>
-
 <head>
     <title>Uploads</title>
 </head>
 
-<body>
-    <div class="container mt-2">
-        <h1>Uploads</h1>
+<body class="bg-light">
 
-        <div class="container table-responsive d-flex justify-content-center">
-            <?php
-            renderLayout('../views/layouts/dataTable', [
-                "headers" => $headers,
-                "body" => $body,
-                "keys" => $keys
-            ]);
-            ?>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4 text-dark">Uploads</h1>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <?php
+                renderLayout('../views/layouts/dataTable', [
+                    "headers" => $headers,
+                    "body" => $body,
+                    "keys" => $keys
+                ]);
+                ?>
+            </div>
         </div>
+
     </div>
 
 </body>

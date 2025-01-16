@@ -16,12 +16,14 @@ class UserService extends Service
     public function atualizarUsuario($dados)
     {
         try {
+            if ($dados['password']) {
+                $dados['password'] = password_hash($dados['password'], PASSWORD_BCRYPT);
+            }
             $this->update($dados, $dados['id']);
             return json_encode(['success' => true, 'mensagem' => "Atualizado com Sucesso"]);
         } catch (\Exception $e) {
             throw $e;
             return json_encode(['error' => true, 'mensagem' => "Erro ao Atualizar"]);
-
         }
     }
 
@@ -105,6 +107,24 @@ class UserService extends Service
             FROM TABLE_NAME
             WHERE deleted_at IS NULL;
         ");
+    }
+
+    public function dataTable()
+    {
+        $signerService = new SignersService();
+        $sql = "
+        SELECT
+        *,
+        TO_CHAR(created_at, 'DD/MM/YYYY HH24:MI') AS criado_em   
+        FROM 
+                TABLE_NAME 
+            WHERE 
+                user_id = :userID
+            ";
+
+        $params = ['userID' => $_SESSION['user_id']];
+
+        return $signerService->search($sql, $params);
     }
 
     private function verificarEmail($email)

@@ -1,12 +1,12 @@
-<div id="pizza_chart_<?php echo $title; ?>"></div>
+<div id="pizza_chart"></div>
 
 
 <script>
     const chartData = <?php echo json_encode($data); ?>;
-
     const userNames = chartData.map(item => item.user_name);
     const counts = chartData.map(item => item.total_uploads); 
 
+    console.log(counts)
     const pieOptions = {
         chart: {
             type: 'pie',
@@ -22,7 +22,7 @@
     };
 
     const pieChart = new ApexCharts(
-        document.querySelector("#pizza_chart_<?php echo $title; ?>"), 
+        document.querySelector("#pizza_chart"), 
         pieOptions
     );
     pieChart.render();

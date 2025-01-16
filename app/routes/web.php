@@ -1,7 +1,7 @@
 <?php
 
 Route::get('/dashboard', function () {
-    return (new DashboardController())->index();
+    return (new UserController())->dashboard();
 });
 
 Route::get('/login',function () {
@@ -31,18 +31,22 @@ Route::post('/register', function (){
     return (new UserController())->store($dados);
 });
 
-Route::get('/usuarios',function(){
-    return (new AdminController())->index();
+Route::post('/usuario/atualizar',function(){
+    $dados = $_POST; 
+
+    return (new UserController())->atualizarUsuario($dados);
 });
 
 Route::post('/usuario',function(){
     $dados = $_POST; 
 
-    return (new AdminController())->usuario($dados);
+    return (new UserController())->getUser($dados);
 });
 
-Route::post('/usuario/atualizar',function(){
-    $dados = $_POST; 
+Route::get('/usuarios',function(){
+    return (new AdminController())->usuarios();
+});
 
-    return (new AdminController())->atualizarUsuario($dados);
+Route::get('/',function(){
+    return (new UserController())->home();
 });

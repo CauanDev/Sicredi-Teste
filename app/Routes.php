@@ -23,7 +23,8 @@ class Route
         }
 
         http_response_code(404);
-        return "404 - Página não encontrada";
+        header("Location: /");  // Altere a URL conforme necessário
+        exit;
     }
 }
 
