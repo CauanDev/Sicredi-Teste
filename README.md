@@ -21,6 +21,7 @@ Este projeto é um sistema de gerenciamento de usuários e documentos, desenvolv
 - **Banco de Dados**: PostgreSQL
 - **Frontend**: Bootstrap e jQuery
 - **Validação de E-mail**: Integração com [Emailable](https://emailable.com)
+- **Portal de Assinaturas**: Integração com [Portal de Assinaturas](https://sandbox.portaldeassinaturas.com.br)
 - **Controle de Versão**: Git
 
 ---
