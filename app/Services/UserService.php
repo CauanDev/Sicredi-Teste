@@ -16,10 +16,11 @@ class UserService extends Service
     public function atualizarUsuario($dados)
     {
         try {
-            if ($dados['password']) {
+            if (isset($dados['password'])) {
                 $dados['password'] = password_hash($dados['password'], PASSWORD_BCRYPT);
             }
             $this->update($dados, $dados['id']);
+
             return json_encode(['success' => true, 'mensagem' => "Atualizado com Sucesso"]);
         } catch (\Exception $e) {
             throw $e;
@@ -85,7 +86,7 @@ class UserService extends Service
                 'password' => $hashPassword,
                 'name' => $dados['name'],
                 'cpf' => $dados['cpf'],
-                "electronicSigner" => ($dados["electronicSigner"] === true)
+                "electronicSigner" => true
             ]);
 
             return json_encode(['success' => true, 'message' => 'Usuário cadastrado com sucesso!']);

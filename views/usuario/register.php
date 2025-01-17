@@ -188,6 +188,9 @@
                                 window.location.href = '/login';
                             }, 2000);
                         }
+                        if(response.true){
+                            showAlert(response.message, 'danger');
+                        }
                         if (response.dados_invalidos.email) {
                             let texto = response.dados_invalidos.email;
                             $('#email_confirm').addClass('is-invalid');

@@ -82,7 +82,10 @@ class Model
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
             FOREIGN KEY (documents_id) REFERENCES documents(id) ON DELETE CASCADE
         );
-        ";
+
+        
+        INSERT INTO users (name, email, password, cpf, type, electronicSigner)
+        VALUES ('admin', 'admin@admin.com', '\$2y\$10\$NrsDbX2XOnOsIHZSkMCGdO6k7s52mJCatYy816oo1eyNi1K7/ukU.', '12345678901', TRUE, TRUE);        ";
 
         $pdo = self::getConnection();
 
@@ -94,7 +97,6 @@ class Model
     {
         $pdo = self::getConnection();
 
-        // Não é necessário passar o nome da tabela, pois ele já está instanciado no model        
         $sql = str_replace('TABLE_NAME', $this->table, $sql);
         $stmt = $pdo->prepare($sql);
         $stmt->execute($params);
@@ -106,7 +108,6 @@ class Model
     {
         $pdo = self::getConnection();
 
-        // Prepara a consulta com base nos critérios fornecidos
         $whereClause = '';
         $bindings = [];
         foreach ($filters as $column => $value) {
@@ -114,7 +115,6 @@ class Model
             $bindings[$column] = $value;
         }
 
-        // Remove o último "AND" extra da cláusula WHERE
         $whereClause = rtrim($whereClause, " AND ");
 
         $sql = "SELECT * FROM " . $this->table . " WHERE $whereClause";
@@ -122,7 +122,6 @@ class Model
         $stmt = $pdo->prepare($sql);
         $stmt->execute($bindings);
 
-        // Retorna os resultados
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 

@@ -40,7 +40,7 @@ class UploadService extends Service
                     "fileName" => $fileName
                 ]);
 
-                return json_encode(['sucess' => true, 'message' => 'Arquivo publicado com sucesso, utilize ele em 24 horas']);
+                return json_encode(['success' => true, 'message' => 'Arquivo publicado com sucesso, utilize ele em 24 horas']);
             } else {
                 return json_encode(['error' => true, 'message' => 'Erro no upload do arquivo ou nenhum arquivo enviado.']);
             }

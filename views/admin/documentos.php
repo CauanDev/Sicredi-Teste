@@ -17,11 +17,19 @@
         <div class="card mb-4">
             <div class="card-body">
                 <?php
-                renderLayout('../views/layouts/dataTable', [
-                    "headers" => $headers,
-                    "body" => $body,
-                    "keys" => $keys
-                ]);
+                if(count($body)>1){
+                    renderLayout('../views/layouts/dataTable', [
+                        "headers" => $headers,
+                        "body" => $body,
+                        "keys" => $keys
+                    ]);
+                }
+                else{
+                    echo" 
+                    
+                    "; // crie algo aqui, que nao tem nada disponivel e que tem que adicionar, dai coloca um botao e tals
+                }
+  
                 ?>
             </div>
         </div>

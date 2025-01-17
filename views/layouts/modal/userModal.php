@@ -24,106 +24,110 @@
                         <input type="password" class="form-control" id="password" name="password">
                     </div>
                     <div class="mb-3">
-                        <label for="electronicSigner" class="form-label">Electronic Signer</label>
-                        <input type="checkbox" class="form-check-input" id="electronicSigner" name="electronicSigner">
-                    </div>  
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-success">Salvar alterações</button>
+                        <label for="electronicsigner" class="form-label">Electronic Signer</label>
+                        <input type="checkbox" class="form-check-input" id="electronicsigner" name="electronicsigner">
+                    </div>
+                    <div class="mb-3">
+                        <label for="type" class="form-label">Admin</label>
+                        <input type="checkbox" class="form-check-input" id="type" name="type">
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <!-- Form button to trigger form submission -->
+                <button type="submit" class="btn btn-success" form="updateUserForm">Salvar alterações</button>
             </div>
         </div>
     </div>
 </div>
-
 <script>
-$(document).ready(function () {
-    let originalData = {};
+    $(document).ready(function() {
+        let originalData = {};
+        let userId = null;
 
-    $('.edit-user').on('click', function () {
-        const userId = $(this).data('id');
-        $('#updateUserForm')[0].reset();
+        $('.edit-user').on('click', function() {
+            userId = $(this).data('id');
+            $('#updateUserForm')[0].reset();
 
-        $.ajax({
-            url: '/usuario',
-            method: 'POST',
-            data: { userId },
-            dataType: 'json',
-            success: function (response) {
-                const data = response.dados[0];
-                if (data) {
-                    $('#name').val(data.name);
-                    $('#email').val(data.email);
-                    $('#cpf').val(data.cpf);
-                    $('#electronicSigner').prop('checked', data.electronicSigner);
+            $.ajax({
+                url: '/usuario',
+                method: 'POST',
+                data: { userId },
+                dataType: 'json',
+                success: function(response) {
+                    const data = response.dados[0];
+                    if (data) {
+                        $('#name').val(data.name);
+                        $('#email').val(data.email);
+                        $('#cpf').val(data.cpf);
+                        $('#electronicsigner').prop('checked', data.electronicsigner === true);     
+                        $('#type').prop('checked', data.type === true);
 
-                    // Salvar os valores originais para comparação
-                    originalData = {
-                        name: data.name,
-                        email: data.email,
-                        cpf: data.cpf,
-                        electronicSigner: data.electronicSigner ? 'on' : '',
-                    };
+                        originalData = {
+                            name: data.name,
+                            email: data.email,
+                            cpf: data.cpf,
+                            electronicsigner: data.electronicsigner,
+                            type: data.type
+                        };
 
-                    $('#updateUserModal').modal('show');
+                        $('#updateUserModal').modal('show');
+                    } else {
+                        alert('Usuário não encontrado.');
+                    }
+                },
+                error: function() {
+                    alert('Erro ao carregar os dados do usuário.');
+                },
+            });
+        });
+
+        $('#updateUserForm').on('submit', function(e) {
+            e.preventDefault();
+
+            const formData = $(this).serializeArray();
+            const updatedFields = {};
+
+            formData.forEach(({ name, value }) => {
+                if (name === 'password' && value.trim() === '') {
+                    return;
                 } else {
-                    alert('Usuário não encontrado.');
+                    if (originalData[name] !== value) {
+                        updatedFields[name] = value;
+                    }
                 }
-            },
-            error: function () {
-                alert('Erro ao carregar os dados do usuário.');
-            },
+            });
+
+            updatedFields.electronicsigner = $('#electronicsigner').prop('checked') ? true : false;
+            updatedFields.type = $('#type').prop('checked') ? true : false;
+
+            if (Object.keys(updatedFields).length === 0) {
+                alert('Nenhuma alteração foi feita.');
+                return;
+            }
+
+            updatedFields.id = userId;
+
+            $.ajax({
+                url: '/usuario/atualizar',
+                method: 'POST',
+                data: updatedFields,
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        alert('Usuário atualizado com sucesso!');
+                        $('#updateUserModal').modal('hide');
+                        location.reload();
+                    } else {
+                        alert(response.message || 'Erro ao atualizar o usuário.');
+                    }
+                },
+                error: function(xhr) {
+                    const response = xhr.responseJSON;
+                    alert(response?.message || 'Erro ao salvar as alterações.');
+                },
+            });
         });
     });
-
-    $('#updateUserForm').on('submit', function (e) {
-        e.preventDefault();
-
-        const userId = $('.edit-user').data('id');
-        const formData = $(this).serializeArray();
-        const updatedFields = {};
-
-        // Comparar os valores atuais com os originais e enviar apenas os alterados
-        formData.forEach(({ name, value }) => {
-            if (name === 'password' && value.trim() === '') {
-                return; 
-            }
-            if (originalData[name] !== value) {
-                updatedFields[name] = value;
-            }
-        });
-
-        if (Object.keys(updatedFields).length === 0) {
-            alert('Nenhuma alteração foi feita.');
-            return;
-        }
-
-        updatedFields.id = userId;
-
-        $.ajax({
-            url: '/usuario/atualizar',
-            method: 'POST',
-            data: updatedFields,
-            dataType: 'json',
-            success: function (response) {
-                if (response.success) {
-                    alert('Usuário atualizado com sucesso!');
-                    $('#updateUserModal').modal('hide');
-                    location.reload();
-                } else {
-                    alert(response.message || 'Erro ao atualizar o usuário.');
-                }
-            },
-            error: function (xhr) {
-                const response = xhr.responseJSON;
-                alert(response?.message || 'Erro ao salvar as alterações.');
-            },
-        });
-    });
-});
-
-
 </script>

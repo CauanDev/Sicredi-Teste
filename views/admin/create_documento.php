@@ -18,7 +18,6 @@
                 </div>
 
                 <div class="form-group mb-3">
-                    <label for="uploadSelect" class="font-weight-bold">Selecione um Upload</label>
                     <?php
                     renderLayout('../views/layouts/select_form', [
                         "options" => $uploads,

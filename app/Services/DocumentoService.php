@@ -15,27 +15,26 @@ class DocumentoService extends Service
     public function dataTable()
     {
         return $this->uploadService->findOne("
-            SELECT 
-                u.fileName AS fileName,
-                us.name AS userName,
-                TO_CHAR(u.created_at, 'DD/MM/YYYY HH24:MI') AS created_at,
-                u.id AS uploadId,
-                d.id AS id,
-                COUNT(s.id) AS contSigners
-            FROM 
-                TABLE_NAME u
-            JOIN 
-                users us ON u.user_id = us.id
-            LEFT JOIN 
-                documents d ON d.upload_id = u.id AND d.deleted_at IS NULL  -- Adicionado filtro para garantir que o deleted_at seja NULL
-            LEFT JOIN 
-                signers s ON s.documents_id = d.id
-            WHERE 
-                d.deleted_at IS NULL  -- Garantir que apenas documentos não excluídos sejam selecionados
-            GROUP BY 
-                u.fileName, us.name, u.created_at, u.id, d.id
-            ORDER BY 
-                u.created_at DESC;
+        SELECT 
+            d.fileName AS fileName,
+            us.name AS userName,
+            TO_CHAR(u.created_at, 'DD/MM/YYYY HH24:MI') AS created_at,
+            u.id AS uploadId,
+            d.id AS id,
+            COUNT(s.id) AS contSigners
+        FROM 
+            TABLE_NAME u
+        JOIN 
+            users us ON u.user_id = us.id
+        JOIN 
+            documents d ON d.upload_id = u.id AND d.deleted_at IS NULL 
+        LEFT JOIN 
+            signers s ON s.documents_id = d.id
+        GROUP BY 
+            d.fileName, us.name, u.created_at, u.id, d.id
+        ORDER BY 
+            u.created_at DESC;
+
         ");
     }
 
@@ -47,10 +46,9 @@ class DocumentoService extends Service
         $uploadService = new UploadService();
         $signersService = new SignersService();
 
-        $logFilePath = __DIR__ . '/log.txt';
 
         try {
-            $users = json_decode($dados['users'], true); // Decodificando o JSON de usuários
+            $users = json_decode($dados['users'], true); 
             $signers = [];
             $electronicSigners = [];
 
