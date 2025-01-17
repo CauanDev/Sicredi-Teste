@@ -21,7 +21,7 @@ Route::get('/register',function (){
 Route::get('/logout',function (){
     session_unset();
     session_destroy();
-    header('Location:/');
+    header('Location: /');
     exit();
 });
 
