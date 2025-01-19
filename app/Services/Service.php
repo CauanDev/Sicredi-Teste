@@ -64,7 +64,7 @@ class Service
         if (strtoupper($method) === 'DELETE') {
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
             if (!empty($data)) {
-                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data)); // Se necessário passar dados no corpo da requisição
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
             }
         }
 

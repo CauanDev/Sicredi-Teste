@@ -9,14 +9,13 @@ loadEnv();
 class Model
 {
     protected static $pdo;
-    protected $table;  // Aqui armazenamos o nome da tabela, que será definida nas classes filhas.
+    protected $table; 
 
     public function __construct($table = null)
     {
         $this->table = $table;
     }
 
-    // Estabelecendo a conexão com o banco de dados PostgreSQL
     public static function getConnection()
     {
         if (!self::$pdo) {

@@ -105,9 +105,8 @@
     <script>
         $(document).ready(function() {
             $('#registerForm').on('submit', function(e) {
-                e.preventDefault(); // Evita o comportamento padrão do formulário
+                e.preventDefault(); 
 
-                // Limpa todas as mensagens de erro anteriores
                 $('.is-invalid').removeClass('is-invalid');
                 $('.invalid-feedback').hide();
 
@@ -117,19 +116,17 @@
                     name: $('#name').val(),
                     cpf: $('#cpf').val(),
                     password: $('#password').val(),
-                    eletronicSigner: $('#eletronicSigner').prop('checked') ? 'true' : 'false', // Verifica se o checkbox está marcado
+                    eletronicSigner: $('#eletronicSigner').prop('checked') ? 'true' : 'false',
                 };
 
                 let hasError = false;
 
-                // Verifica se os campos estão vazios
                 if (!formData.email) {
                     $('#email').addClass('is-invalid');
                     $('#email').siblings('.invalid-feedback').show();
                     hasError = true;
                 }
 
-                // Verifica se o e-mail é válido (contém @ e .)
                 if (formData.email && !formData.email.includes('@') || !formData.email.includes('.')) {
                     $('#email').addClass('is-invalid');
                     $('#email').siblings('.invalid-feedback').text('Por favor, insira um e-mail válido.').show();
@@ -154,26 +151,22 @@
                     hasError = true;
                 }
 
-                // Verifica se os e-mails coincidem
                 if (formData.email !== formData.email_confirm) {
                     $('#email_confirm').addClass('is-invalid');
                     $('#email_confirm').siblings('.invalid-feedback').text('Os e-mails não coincidem.').show();
                     hasError = true;
                 }
 
-                // Verifica se o CPF é válido
                 if (!isValidCPF(formData.cpf)) {
                     $('#cpf').addClass('is-invalid');
                     $('#cpf').siblings('.invalid-feedback').show();
                     hasError = true;
                 }
 
-                // Se houver erro, não envia o formulário
                 if (hasError) {
                     return;
                 }
 
-                // Envia os dados via AJAX
                 $.ajax({
                     url: '/register',
                     method: 'POST',
@@ -208,18 +201,16 @@
             });
         });
 
-        // Função para validar o CPF
         function isValidCPF(cpf) {
-            cpf = cpf.replace(/[^\d]+/g, ''); // Remove tudo o que não é dígito
+            cpf = cpf.replace(/[^\d]+/g, ''); 
 
             if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
-                return false; // CPF com todos os dígitos iguais (ex: 11111111111)
+                return false; 
             }
 
             let sum = 0;
             let remainder;
 
-            // Validação do primeiro dígito
             for (let i = 1; i <= 9; i++) {
                 sum += parseInt(cpf.substring(i - 1, i)) * (11 - i);
             }
@@ -233,7 +224,6 @@
 
             sum = 0;
 
-            // Validação do segundo dígito
             for (let i = 1; i <= 10; i++) {
                 sum += parseInt(cpf.substring(i - 1, i)) * (12 - i);
             }

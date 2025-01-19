@@ -30,11 +30,9 @@
 
 <script>
     $(document).ready(function () {
-        // Evento de clique para visualizar o documento
         $('.view-document').on('click', function () {
             const documentId = $(this).data('id');
 
-            // Carregar a primeira tabela no modalContent (fixo)
             $('#modalContent').html('Carregando...');
             $.ajax({
                 url: '/documentos',

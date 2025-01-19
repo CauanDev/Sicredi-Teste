@@ -96,8 +96,6 @@
                 formData.append('users', JSON.stringify(selectedUsers)); 
                 formData.append('name_upload', uploadTarget); 
 
-                console.log(formData);
-                // Envia os dados via AJAX
                 $.ajax({
                     url: '/documentos/create',
                     type: 'POST',

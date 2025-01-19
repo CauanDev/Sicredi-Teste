@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <head>
     <title>Usuários</title>
 </head>
@@ -16,11 +17,20 @@
         <div class="card mb-4">
             <div class="card-body">
                 <?php
-                renderLayout('../views/layouts/dataTable', [
-                    "headers" => $headers,
-                    "body" => $body,
-                    "keys" => $keys
-                ]);
+                if (!empty($body)) {
+                    renderLayout('../views/layouts/dataTable', [
+                        "headers" => $headers,
+                        "body" => $body,
+                        "keys" => $keys
+                    ]);
+                } else {
+                    echo " 
+                        <div>
+                            <p>Não há dados disponíveis no momento.</p>
+                        </div>
+                    ";
+                }
+
                 ?>
             </div>
         </div>

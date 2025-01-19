@@ -31,7 +31,6 @@ class UserService extends Service
     public function login($dados)
     {
         try {
-            // Busca o usuário pelo e-mail
             $users =  $this->findOne(['email' => $dados['email']]);
 
             if (!empty($users)) {
@@ -69,7 +68,6 @@ class UserService extends Service
     public function create($dados)
     {
         try {
-            // Verifica se o e-mail é válido e não existe
             $emailVerificado = $this->verificarEmail($dados['email']);
             $emailVerificado = json_decode($emailVerificado, true);
 
@@ -78,7 +76,6 @@ class UserService extends Service
             }
 
 
-            // Criptografa a senha
             $hashPassword = password_hash($dados['password'], PASSWORD_BCRYPT);
 
             $this->store([
@@ -142,17 +139,14 @@ class UserService extends Service
             'api_key' => $apiToken
         ]);
 
-        // Construção da URL final com parâmetros
         $url = "{$apiUrl}/verify?" . $queryParams;
 
         try {
             $response = $this->httpRequest($url);
 
-            // Verifica se a resposta foi recebida
             if ($response) {
                 $dados = json_decode($response, true);
 
-                // Caso o resultado seja 'deliverable', quer dizer que o email existe
                 if (isset($dados['state']) && $dados['state'] === 'deliverable') {
                     return json_encode(['success' => true, 'resultado' => true]);
                 } else {

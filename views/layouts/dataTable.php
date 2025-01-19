@@ -15,7 +15,6 @@
       echo "<tr>";
       foreach ($keys as $key) {
         if ($key == "actions-documentos") {
-          // Não há necessidade de 'actions-documentos' no modelo de dados, geramos as ações manualmente
           echo "
           <td>
               <button class='btn btn-sm btn-danger' data-id='{$row->id}' data-target='delete'><i class='bi bi-trash-fill'></i></button>

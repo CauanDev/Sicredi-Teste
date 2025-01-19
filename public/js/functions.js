@@ -33,7 +33,5 @@ function showSpinner(show = true) {
 }
 
 
-
-// Registrar globalmente
 window.showAlert = showAlert;
 window.showSpinner = showSpinner;

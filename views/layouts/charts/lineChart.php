@@ -47,7 +47,7 @@
             }
         },
         title: {
-            text: "<?php echo $title; ?>",  // Corrigido para ser uma string
+            text: "<?php echo $title; ?>", 
             align: 'center'
         },
         colors: ['#008FFB', '#FF4560']

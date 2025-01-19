@@ -50,7 +50,6 @@
             $('#loginForm').on('submit', function(e) {
                 e.preventDefault(); 
 
-                // Limpa todas as mensagens de erro anteriores
                 $('.is-invalid').removeClass('is-invalid');
                 $('.invalid-feedback').hide();
 
@@ -61,7 +60,6 @@
 
                 let hasError = false;
 
-                // Verifica se o e-mail é válido (contém "@" e ".")
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!formData.email || !emailRegex.test(formData.email)) {
                     $('#email').addClass('is-invalid');
@@ -69,7 +67,6 @@
                     hasError = true;
                 }
 
-                // Verifica o tamanho da senha (mínimo de 6 caracteres)
                 if (!formData.password || formData.password.length < 6) {
                     $('#password').addClass('is-invalid');
                     $('#password').siblings('.invalid-feedback').show();

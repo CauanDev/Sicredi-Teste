@@ -49,7 +49,6 @@
                     hasError = true;
                 }
 
-                // Verifica se o tipo de arquivo é PDF
                 var file = $('#file')[0].files[0];
                 var fileType = file ? file.type : '';
                 if (fileType && fileType !== 'application/pdf') {
@@ -61,7 +60,6 @@
                     return;
                 }
 
-                // Envia o arquivo via AJAX
                 $.ajax({
                     url: '/uploads/create',
                     type: 'POST',

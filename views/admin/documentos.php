@@ -9,7 +9,6 @@
     <div class="container mt-5">
         <h1 class="text-center mb-4 text-dark">Documentos</h1>
 
-        <!-- Modal -->
         <?php
         renderLayout('../views/layouts/modal/documentosModal');
         ?>
@@ -17,7 +16,8 @@
         <div class="card mb-4">
             <div class="card-body">
                 <?php
-                if(count($body)>1){
+
+                if(!empty($body)){
                     renderLayout('../views/layouts/dataTable', [
                         "headers" => $headers,
                         "body" => $body,
@@ -26,8 +26,13 @@
                 }
                 else{
                     echo" 
-                    
-                    "; // crie algo aqui, que nao tem nada disponivel e que tem que adicionar, dai coloca um botao e tals
+                        <div>
+                            <p>Não há dados disponíveis no momento.</p>
+                            <a href='/documentos/create'>
+                                <button class='btn btn-primary'>Adicionar Documento</button>
+                            </a>
+                        </div>
+                    ";
                 }
   
                 ?>
@@ -46,7 +51,6 @@
 
                         if (clickedButton.classList.contains('btn-danger')) {
                             if (confirm("Tem certeza que deseja excluir este documento?")) {
-                                // Requisição AJAX para deletar o documento
                                 $.ajax({
                                     url: '/documentos/delete',
                                     method: 'POST',
