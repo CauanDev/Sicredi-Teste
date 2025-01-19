@@ -6,18 +6,15 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!-- Conteúdo fixo da primeira tabela -->
                 <div id="modalContent">
                     Carregando...
                 </div>
 
-                <!-- Botões de ação -->
                 <div class="text-center">
                     <button type="button" class="btn btn-primary validarAssinatura">Validar Assinaturas</button>
                     <button type="button" class="btn btn-success verificarStatus">Verificar Status</button>
                 </div>
 
-                <!-- Conteúdo dinâmico adicional -->
                 <div id="modalContentDocument">
                 </div>
             </div>
